@@ -5,8 +5,6 @@ import { Button, ExampleButton } from '../ui/Button';
 import ResultCard from '../ui/ResultCard';
 import Loading from '../ui/Loading';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 const TwitterTab: React.FC = () => {
     const [username, setUsername] = useState('elonmusk');
     const [tweetCount, setTweetCount] = useState(5);
@@ -31,6 +29,7 @@ const TwitterTab: React.FC = () => {
         setError(null);
 
         try {
+            const ai = new GoogleGenAI({ apiKey: window.process.env.API_KEY });
             const response = await ai.models.generateContent({
                 model: 'gemini-2.5-flash',
                 contents: `Simula un análisis de un perfil de Twitter/X. Genera datos de perfil plausibles para el usuario @${username} (nombre, seguidores, verificado, etc.). Luego, crea ${tweetCount} tweets recientes realistas para este usuario. Finalmente, analiza el sentimiento de cada tweet (POSITIVO, NEGATIVO, NEUTRO) y calcula un resumen de sentimientos.
@@ -47,7 +46,8 @@ Devuelve un objeto JSON con 'profile' (con 'name', 'followers', 'verified') y 't
                                     name: { type: Type.STRING },
                                     followers: { type: Type.STRING },
                                     verified: { type: Type.BOOLEAN },
-                                }
+                                },
+                                required: ['name', 'followers', 'verified']
                             },
                             tweets: {
                                 type: Type.ARRAY,
@@ -56,10 +56,12 @@ Devuelve un objeto JSON con 'profile' (con 'name', 'followers', 'verified') y 't
                                     properties: {
                                         content: { type: Type.STRING },
                                         sentiment: { type: Type.STRING }
-                                    }
+                                    },
+                                    required: ['content', 'sentiment']
                                 }
                             }
-                        }
+                        },
+                        required: ['profile', 'tweets']
                     }
                 }
             });

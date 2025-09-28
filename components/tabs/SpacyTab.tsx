@@ -5,8 +5,6 @@ import { Button, ExampleButton } from '../ui/Button';
 import ResultCard from '../ui/ResultCard';
 import Loading from '../ui/Loading';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 type AnalysisType = 'tokens' | 'entidades';
 
 const SpacyTab: React.FC = () => {
@@ -50,6 +48,7 @@ const SpacyTab: React.FC = () => {
         const requestedAnalyses = Array.from(analysisTypes).join(', ');
 
         try {
+            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
             const response = await ai.models.generateContent({
                 model: 'gemini-2.5-flash',
                 contents: `Realiza un análisis lingüístico avanzado al estilo de spaCy sobre el siguiente texto. Realiza los siguientes análisis: ${requestedAnalyses}.

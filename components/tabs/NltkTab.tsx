@@ -5,8 +5,6 @@ import { Button, ExampleButton } from '../ui/Button';
 import ResultCard from '../ui/ResultCard';
 import Loading from '../ui/Loading';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 const NltkTab: React.FC = () => {
     const [text, setText] = useState('');
     const [loading, setLoading] = useState(false);
@@ -35,6 +33,7 @@ const NltkTab: React.FC = () => {
         setError(null);
 
         try {
+            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
             const response = await ai.models.generateContent({
                 model: 'gemini-2.5-flash',
                 contents: `Simula el analizador de sentimientos NLTK VADER. Analiza el siguiente texto y proporciona las puntuaciones de sentimiento 'neg', 'neu', 'pos' y 'compound'. El texto original está en español; tradúcelo mentalmente a inglés para un mejor análisis VADER.

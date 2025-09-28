@@ -5,8 +5,6 @@ import { Button, ExampleButton } from '../ui/Button';
 import ResultCard from '../ui/ResultCard';
 import Loading from '../ui/Loading';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 const ExcelTab: React.FC = () => {
     const [csvData, setCsvData] = useState('');
     const [loading, setLoading] = useState(false);
@@ -37,6 +35,7 @@ const ExcelTab: React.FC = () => {
         setError(null);
 
         try {
+            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
             const response = await ai.models.generateContent({
                 model: 'gemini-2.5-flash',
                 contents: `Simula un procesador masivo de un archivo Excel/CSV que usa NLTK VADER para análisis de sentimiento. Analiza cada fila de texto en los siguientes datos CSV. Para cada fila, proporciona el texto original y las puntuaciones de sentimiento VADER ('neg', 'neu', 'pos', 'compound').
