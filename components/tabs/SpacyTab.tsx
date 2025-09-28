@@ -48,7 +48,7 @@ const SpacyTab: React.FC = () => {
         const requestedAnalyses = Array.from(analysisTypes).join(', ');
 
         try {
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+            const ai = new GoogleGenAI({ apiKey: window.process.env.API_KEY });
             const response = await ai.models.generateContent({
                 model: 'gemini-2.5-flash',
                 contents: `Realiza un análisis lingüístico avanzado al estilo de spaCy sobre el siguiente texto. Realiza los siguientes análisis: ${requestedAnalyses}.
@@ -67,14 +67,24 @@ Para 'entidades', devuelve un array de objetos con 'text', 'label' (tipo de enti
                                 type: Type.ARRAY,
                                 items: {
                                     type: Type.OBJECT,
-                                    properties: { text: { type: Type.STRING }, pos: { type: Type.STRING }, explanation: { type: Type.STRING } }
+                                    properties: { 
+                                        text: { type: Type.STRING }, 
+                                        pos: { type: Type.STRING }, 
+                                        explanation: { type: Type.STRING } 
+                                    },
+                                    required: ['text', 'pos', 'explanation']
                                 }
                             },
                             entidades: {
                                 type: Type.ARRAY,
                                 items: {
                                     type: Type.OBJECT,
-                                    properties: { text: { type: Type.STRING }, label: { type: Type.STRING }, explanation: { type: Type.STRING } }
+                                    properties: { 
+                                        text: { type: Type.STRING }, 
+                                        label: { type: Type.STRING }, 
+                                        explanation: { type: Type.STRING } 
+                                    },
+                                    required: ['text', 'label', 'explanation']
                                 }
                             }
                         }

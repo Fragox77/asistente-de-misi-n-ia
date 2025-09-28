@@ -54,7 +54,8 @@ Devuelve el resultado en formato JSON.`,
                             final_polarity: { type: Type.NUMBER },
                             final_subjectivity: { type: Type.NUMBER },
                             final_sentiment: { type: Type.STRING },
-                        }
+                        },
+                        required: ["original_text", "translated_text", "spanish_polarity", "english_polarity", "final_polarity", "final_subjectivity", "final_sentiment"]
                     }
                 }
             });
@@ -71,4 +72,86 @@ Devuelve el resultado en formato JSON.`,
                 </div>
                 <p className="text-sm text-gray-400 mb-4 italic">Original: "{data.original_text}"</p>
                 
-                <div className="bg-gray-800/50 p-4 rounded-md border border-gray-700 space
+                <div className="bg-gray-800/50 p-4 rounded-md border border-gray-700 space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-gray-300 mb-2">Métricas Finales</h4>
+                    <div className="space-y-3 font-mono text-sm">
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-300">Polaridad:</span>
+                        <span className="font-bold text-purple-300">{data.final_polarity.toFixed(4)}</span>
+                      </div>
+                      <div className="w-full bg-gray-700 rounded-full h-2.5">
+                        <div 
+                           className="h-2.5 rounded-full" 
+                           style={{ 
+                             width: `${polarityPercent}%`,
+                             background: 'linear-gradient(to right, #ef4444, #f59e0b, #22c55e)'
+                           }}
+                        ></div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-300">Subjetividad:</span>
+                        <span className="font-bold">{data.final_subjectivity.toFixed(4)}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-4 border-t border-gray-700/50">
+                    <h4 className="font-semibold text-gray-300 mb-2">Desglose del Análisis Híbrido</h4>
+                     <ul className="space-y-2 text-xs text-gray-400">
+                        <li><strong>Español (30%):</strong> Polaridad de <span className="font-semibold text-cyan-400">{data.spanish_polarity.toFixed(4)}</span></li>
+                        <li><strong>Inglés (70%):</strong> Polaridad de <span className="font-semibold text-cyan-400">{data.english_polarity.toFixed(4)}</span></li>
+                        <li className="italic pt-1">Traducido: "{data.translated_text}"</li>
+                     </ul>
+                  </div>
+                </div>
+              </div>
+            );
+            setResult(formattedResult);
+        } catch (e) {
+            console.error(e);
+            setError('No se pudo completar el análisis. Inténtalo de nuevo.');
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    const handleClear = () => {
+        setText('');
+        setResult(null);
+        setError(null);
+    }
+
+    return (
+        <DemoCard
+            title="🔬 Demo: Análisis con TextBlob"
+            description={
+                <p><strong>Ejercicio 1:</strong> Análisis de sentimientos optimizado para español usando una estrategia híbrida simulada por Gemini. Combina resultados con pesos 30% español + 70% inglés.</p>
+            }
+        >
+            <div className="space-y-4">
+                <textarea
+                    id="textblobInput"
+                    className="w-full h-32 p-3 bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none resize-vertical"
+                    rows={4}
+                    placeholder="Ejemplo: ¡Me encanta este curso de IA! Estoy aprendiendo muchísimo y los proyectos son fascinantes."
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                />
+                <div className="flex flex-wrap gap-2">
+                    <ExampleButton onClick={() => setText(examples.positive)}>😊 Muy Positivo</ExampleButton>
+                    <ExampleButton onClick={() => setText(examples.neutral)}>😐 Neutro</ExampleButton>
+                    <ExampleButton onClick={() => setText(examples.negative)}>😞 Negativo</ExampleButton>
+                </div>
+                <div className="flex flex-wrap gap-4">
+                    <Button onClick={handleAnalyze} disabled={loading}>🔍 Analizar Sentimiento</Button>
+                    <Button onClick={handleClear} variant="secondary" disabled={loading}>🧹 Limpiar</Button>
+                </div>
+                {loading && <Loading text="Procesando análisis híbrido..." />}
+                <ResultCard content={result} error={error} />
+            </div>
+        </DemoCard>
+    );
+};
+
+export default TextBlobTab;
