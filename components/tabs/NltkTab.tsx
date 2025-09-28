@@ -5,7 +5,7 @@ import { Button, ExampleButton } from '../ui/Button';
 import ResultCard from '../ui/ResultCard';
 import Loading from '../ui/Loading';
 
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const NltkTab: React.FC = () => {
     const [text, setText] = useState('');

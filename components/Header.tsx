@@ -9,8 +9,13 @@ const TechBadge: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 const Header: React.FC = () => {
   return (
     <header className="text-center bg-gray-800/50 backdrop-blur-sm border border-purple-500/30 rounded-2xl shadow-2xl shadow-purple-900/20 p-6 sm:p-8">
-      <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-purple-400 to-indigo-400 text-transparent bg-clip-text">
-        🎯 Misión 1: Análisis de Texto y Sentimientos
+      <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight flex items-center justify-center gap-x-3 sm:gap-x-4">
+        {/* El icono ahora está separado y siempre es visible */}
+        <span>🎯</span>
+        {/* El texto mantiene el efecto de degradado */}
+        <span className="bg-gradient-to-r from-purple-400 to-indigo-400 text-transparent bg-clip-text">
+          Misión 1: Análisis de Texto y Sentimientos
+        </span>
       </h1>
       <p className="mt-2 text-lg text-gray-300 font-semibold">
         Bootcamp IA Intermedio L2-G120-C8-IA-I-P | Jhon Fragozo
